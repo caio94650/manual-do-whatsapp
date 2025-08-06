@@ -1,210 +1,164 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SharkBot - WhatsApp Simulado</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: #e5ddd5;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('https://i.ibb.co/f1MKwcb/wp-bg.png') repeat;
+      background-size: cover;
     }
-    .phone {
-      width: 360px;
-      height: 640px;
-      background-color: #fff;
-      border-radius: 30px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    .top-bar {
+      background: #202c33;
+      color: white;
+      padding: 5px 10px;
+      font-size: 14px;
       display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: relative;
-    }
-    .status-bar {
-      height: 24px;
-      background-color: #075E54;
-      color: #fff;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
+      align-items: center;
+    }
+    .status-icons span {
+      margin-left: 8px;
     }
     .header {
-      height: 56px;
-      background-color: #075E54;
+      background: #202c33;
       color: white;
       display: flex;
       align-items: center;
-      padding: 0 10px;
+      padding: 10px;
     }
     .header img {
-      width: 36px;
-      height: 36px;
+      width: 40px;
       border-radius: 50%;
       margin-right: 10px;
     }
-    .header .name-status {
-      flex-grow: 1;
+    .header-info {
+      flex: 1;
     }
-    .header .name-status .name {
-      font-weight: bold;
-      font-size: 16px;
-    }
-    .header .name-status .status {
-      font-size: 12px;
-      color: #d0f0c0;
-    }
-    .header .icons i {
+    .header-actions img {
+      width: 24px;
       margin-left: 15px;
-      font-size: 18px;
+      filter: brightness(0) invert(1);
+      cursor: pointer;
     }
     .chat {
-      flex: 1;
-      background: url('https://i.ibb.co/gPGS8wp/bg-whatsapp.png');
-      background-size: cover;
       padding: 10px;
+      height: 80vh;
       overflow-y: auto;
     }
-    .bubble {
-      max-width: 75%;
-      padding: 8px 12px;
-      margin: 5px 0;
+    .message {
+      max-width: 70%;
+      padding: 10px;
       border-radius: 8px;
+      margin: 5px 0;
       position: relative;
       font-size: 14px;
-      animation: fadeIn 0.4s ease-in-out;
     }
     .bot {
-      background-color: #dcf8c6;
+      background: #e1ffc7;
       align-self: flex-start;
     }
     .user {
-      background-color: #fff;
+      background: #dcf8c6;
       align-self: flex-end;
+      margin-left: auto;
     }
     .time {
       font-size: 10px;
-      text-align: right;
-      margin-top: 3px;
-      opacity: 0.6;
+      color: gray;
+      position: absolute;
+      bottom: 2px;
+      right: 8px;
     }
-    .buttons {
-      padding: 10px;
-      background-color: #f0f0f0;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-    .btn {
-      background-color: #25D366;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .typing {
+      font-style: italic;
+      color: gray;
     }
   </style>
 </head>
 <body>
-  <div class="phone">
-    <div class="status-bar">
-      <span id="top-time">12:00</span>
-      <span>📶 📱 🔋</span>
-    </div>
-    <div class="header">
-      <img src="https://i.ibb.co/NKjTpy3/bot-avatar.png" alt="bot">
-      <div class="name-status">
-        <div class="name">SharkBot</div>
-        <div class="status">online</div>
-      </div>
-      <div class="icons">
-        <i>📞</i>
-        <i>📵</i>
-      </div>
-    </div>
-    <div class="chat" id="chatBox"></div>
-    <div class="buttons">
-      <button class="btn" onclick="userReply('Quero o manual')">Quero o manual</button>
-      <button class="btn" onclick="userReply('Como evitar ban?')">Como evitar ban?</button>
+  <div class="top-bar">
+    <div id="time"></div>
+    <div class="status-icons">
+      <span>📶</span>
+      <span>📡</span>
+      <span>🔋</span>
     </div>
   </div>
-
-  <audio id="sendSound" src="https://assets.mixkit.co/sfx/preview/mixkit-player-jump-coin-216.wav"></audio>
-  <audio id="receiveSound" src="https://assets.mixkit.co/sfx/preview/mixkit-message-pop-2354.wav"></audio>
+  <div class="header">
+    <img src="https://i.ibb.co/JpG0nVY/profile.jpg" alt="Foto">
+    <div class="header-info">
+      <div><strong>Suporte Oficial</strong></div>
+      <div style="font-size: 12px; color: lightgray;">online</div>
+    </div>
+    <div class="header-actions">
+      <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Call">
+      <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Video">
+    </div>
+  </div>
+  <div class="chat" id="chat"></div>
 
   <script>
-    const chatBox = document.getElementById('chatBox');
-    const sendSound = document.getElementById('sendSound');
-    const receiveSound = document.getElementById('receiveSound');
-    const topTime = document.getElementById('top-time');
+    const chat = document.getElementById('chat');
+    const messages = [
+      { sender: 'bot', text: 'Olá, tudo bem? 👋' },
+      { sender: 'bot', text: 'Seja bem-vindo ao nosso suporte oficial.' },
+      { sender: 'bot', text: 'Você quer saber como aquecer seu WhatsApp corretamente e evitar banimentos?' },
+      { sender: 'bot', text: 'Estamos preparando o seu material exclusivo 📘' },
+      { sender: 'bot', text: 'Só mais um instante, por favor...' },
+      { sender: 'bot', text: '✅ Pronto! Manual preparado com as melhores práticas.' },
+      { sender: 'bot', text: 'Enviando agora para o seu WhatsApp 📲' },
+      { sender: 'bot', text: '✅ Enviado com sucesso! Qualquer dúvida estamos aqui.' }
+    ];
 
-    function updateTime() {
-      const now = new Date();
-      const h = now.getHours().toString().padStart(2, '0');
-      const m = now.getMinutes().toString().padStart(2, '0');
-      topTime.textContent = h + ':' + m;
-      return h + ':' + m;
+    const messageSound = new Audio('https://www.myinstants.com/media/sounds/whatsapp_message.mp3');
+
+    function formatTime() {
+      const date = new Date();
+      return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
     }
 
-    function appendMessage(text, sender) {
-      const time = updateTime();
-      const bubble = document.createElement('div');
-      bubble.className = 'bubble ' + sender;
-      bubble.innerHTML = `${text}<div class="time">${time} ✅</div>`;
-      chatBox.appendChild(bubble);
-      chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+    function appendMessage(sender, text) {
+      const msg = document.createElement('div');
+      msg.className = 'message ' + sender;
+      msg.innerHTML = `${text} <span class="time">${formatTime()}</span>`;
+      chat.appendChild(msg);
+      chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
+      messageSound.play();
     }
 
-    function userReply(text) {
-      appendMessage(text, 'user');
-      sendSound.play();
+    function showTyping(nextStep) {
+      const typing = document.createElement('div');
+      typing.className = 'message bot typing';
+      typing.id = 'typing';
+      typing.textContent = 'digitando...';
+      chat.appendChild(typing);
+      chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
       setTimeout(() => {
-        botTyping();
-        setTimeout(() => {
-          botReply(text);
-        }, 1500);
-      }, 500);
+        typing.remove();
+        nextStep();
+      }, 1200);
     }
 
-    function botTyping() {
-      appendMessage('<i>digitando...</i>', 'bot');
-    }
-
-    function botReply(userMsg) {
-      const bubbles = document.querySelectorAll('.bot');
-      const typing = bubbles[bubbles.length - 1];
-      if (typing && typing.innerHTML.includes('digitando...')) typing.remove();
-
-      let reply = '';
-      if (userMsg.includes('manual')) {
-        reply = 'Perfeito! Aqui está seu manual do WhatsApp 👇<br><a href="https://encurtador.com.br/cEiuS" target="_blank">Acessar Manual</a>';
-      } else if (userMsg.includes('ban')) {
-        reply = 'Para evitar ban, siga o processo de aquecimento e use dados móveis ou proxy residencial. Evite disparos em massa!';
-      } else {
-        reply = 'Desculpe, não entendi. Pode repetir?';
+    function startChat() {
+      let i = 0;
+      function next() {
+        if (i < messages.length) {
+          showTyping(() => {
+            appendMessage(messages[i].sender, messages[i].text);
+            i++;
+            setTimeout(next, 1800);
+          });
+        }
       }
-
-      appendMessage(reply, 'bot');
-      receiveSound.play();
+      next();
     }
 
-    // Mensagens iniciais
-    setTimeout(() => appendMessage('Olá! Eu sou o SharkBot 🤖', 'bot'), 1000);
-    setTimeout(() => appendMessage('Você quer aprender como aquecer WhatsApp corretamente?', 'bot'), 3000);
-    setTimeout(() => appendMessage('Tenho um manual completo para você baixar!', 'bot'), 5000);
+    document.getElementById('time').textContent = formatTime();
+    startChat();
   </script>
 </body>
 </html>
