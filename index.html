@@ -140,23 +140,23 @@
       const msg = document.createElement('div');
       msg.className = `message ${classe}`;
       const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      msg.innerHTML = `${texto}<span class="time">${hora}<span class="check">✔✔</span></span>`;
+      msg.innerHTML = `${texto.replace(/\n/g, '<br>')}<span class="time">${hora}<span class="check">✔✔</span></span>`;
       chat.appendChild(msg);
       chat.scrollTop = chat.scrollHeight;
     }
 
     function iniciarChat() {
       const mensagens = [
-        "⚠️ Seu WhatsApp é seu ganha-pão... e pode ser banido a qualquer momento, sem aviso. Você estaria pronto se isso acontecesse hoje?",
-        "Você investe em tráfego. Cria conteúdo. Responde leads. Fecha vendas. Mas basta um passo errado — às vezes sem perceber — e o WhatsApp derruba seu número.",
-        "E você perde tudo: contatos, conversas, clientes, autoridade.",
-        "Isso já aconteceu com você? Ou o medo de acontecer te trava?",
-        "A verdade é dura: a maioria nem sabe que está fazendo errado. Mas existe um método... um passo a passo real, usado por quem roda dezenas de números por mês — sem bloqueios.",
-        "Foi por isso que criamos o Manual do WhatsApp. Um guia prático com tudo que você precisa pra aumentar a vida útil do seu número e escalar com segurança.",
-        "💡 Já ajudamos mais de 2.400 pessoas a manter seus números ativos, mesmo com uso intenso. O segredo? Aquecer do jeito certo. Usar IPs limpos. Simular comportamento humano.",
-        "✅ Estratégia de aquecimento dia a dia\n✅ Como evitar Shadowban silencioso\n✅ Ferramentas e cuidados com IP, chip e conta\n✅ Planilha de controle pronta\n✅ Bônus: chip virtual por R$ 7",
-        "💥 E mais: app gratuito que aquece mais de 5 WhatsApp ao mesmo tempo, sem cruzar dados, simulando interações reais.",
-        "Quer receber o Manual + App + Bônus direto no seu WhatsApp? Me diz seu nome aqui 👇"
+        "⚠️ Seu número de WhatsApp pode ser banido a qualquer momento, sem aviso. Você estaria pronto se isso acontecesse hoje?",
+        "Você investe em tráfego. Cria conteúdo. Responde leads. Fecha vendas.\nMas basta um único passo errado — às vezes sem perceber — e o WhatsApp derruba seu número.\n\nE com ele, vai tudo embora:\n❌ Seus contatos\n❌ Suas conversas\n❌ Seus clientes\n❌ Sua credibilidade",
+        "🎯 Isso já aconteceu com você?\nOu o medo de acontecer te trava todos os dias?",
+        "A verdade é dura: a maioria das pessoas nem sabe que está fazendo errado.\n\nUsa chip novo direto na conta.\nAbre vários WhatsApp na mesma internet.\nClica onde não deveria.\n\nE aí, quando vem o ban, culpa o app.",
+        "Mas existe um caminho.\n💡 Um método testado. Um passo a passo real.\n\n📌 Usado por quem roda dezenas de números por mês — e mantém tudo ativo, sem bloqueios.",
+        "Foi por isso que criamos o Manual do WhatsApp.\n\n📘 Um guia direto ao ponto, com tudo que você precisa pra:\n✅ Aumentar a vida útil dos seus números\n✅ Escalar com segurança\n✅ E parar de sofrer com bloqueios injustos",
+        "💡 Já ajudamos mais de 2.400 profissionais a manter seus números ativos — mesmo com uso intenso.\n\nO segredo?\n🔥 Aquecer da forma certa\n🔥 Usar IP limpo e dedicado\n🔥 Simular uso humano de verdade\n\nE o principal: evitar os 5 erros que causam 90% dos bans.",
+        "📘 Dentro do Manual você vai encontrar:\n✅ Estratégia de aquecimento dia a dia\n✅ O que o WhatsApp realmente monitora (e ninguém te conta)\n✅ Como escapar do shadowban silencioso\n✅ Ferramentas e cuidados com IP, chip e navegador\n✅ Planilha de controle pronta pra usar\n✅ Bônus: Fornecedor confiável de chip virtual por R$ 6",
+        "💥 E o melhor: vamos liberar também o acesso a um aplicativo gratuito que permite aquecer de 5 a 10 WhatsApp ao mesmo tempo, com segurança.\n\n📱 O app clona os WhatsApp no seu próprio dispositivo — você não precisa comprar vários celulares ou emuladores.\n\n✅ Nada de cruzar dados\n✅ Nada de chip queimado à toa\n✅ Nada de bloqueio por uso suspeito\n\n🔁 Ele simula uso real e interações humanas automáticas, como se fosse uma pessoa de verdade usando cada número.\n\n👉 Ideal pra quem trabalha com contingência, escala ou gestão de múltiplos WhatsApp.",
+        "🚨 Quer o Manual + App de Aquecimento + Bônus exclusivos?\n\n👇 Me fala seu nome aqui embaixo que eu libero o acesso agora mesmo"
       ];
 
       let i = 0;
@@ -164,7 +164,7 @@
         if (i < mensagens.length) {
           adicionarMensagem(mensagens[i]);
           i++;
-          setTimeout(mostrarProxima, 4000);
+          setTimeout(mostrarProxima, 4500);
         } else {
           inputArea.style.display = 'flex';
         }
