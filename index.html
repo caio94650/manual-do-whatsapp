@@ -1,77 +1,118 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Atendimento WhatsApp</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Arial', sans-serif;
-      background-color: #ece5dd;
+      background: #ece5dd;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
-
-    .container {
-      max-width: 500px;
-      margin: 50px auto;
-      background: #fff;
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      position: relative;
+    .chat-header {
+      background: #075e54;
+      color: white;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 10;
     }
-
-    .mensagem {
-      max-width: 80%;
-      padding: 10px 15px;
+    .chat-header .info {
+      display: flex;
+      align-items: center;
+    }
+    .chat-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .chat-header .icons i {
+      font-size: 18px;
+      margin-left: 15px;
+    }
+    .chat-window {
+      flex: 1;
+      margin-top: 60px;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .message {
       background: #dcf8c6;
-      border-radius: 8px 8px 8px 0;
-      margin-bottom: 12px;
+      padding: 10px 14px;
+      border-radius: 7px;
+      margin: 6px 0;
+      align-self: flex-start;
+      max-width: 80%;
       position: relative;
-      color: #000;
-      font-size: 15px;
-      line-height: 1.4;
     }
-
+    .message .time {
+      font-size: 10px;
+      color: gray;
+      position: absolute;
+      right: 8px;
+      bottom: 4px;
+    }
     .digitando {
       font-style: italic;
       color: gray;
       font-size: 13px;
-      margin-bottom: 15px;
-    }
-
-    .footer {
-      text-align: center;
-      font-size: 13px;
-      color: #666;
-      margin-top: 20px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
-  <div class="container" id="chat">
-    <!-- Mensagem 1 -->
-    <div class="mensagem" id="mensagem1" style="display:none;">
-      Olá! Tudo bem? 👋
+  <div class="chat-header">
+    <div class="info">
+      <img src="https://i.ibb.co/YBWSWv5Z/logo-png.png" alt="Avatar">
+      <div>
+        <div style="font-weight:bold">Mariana - Suporte Oficial</div>
+        <div style="font-size: 12px;">Online às <span id="hora"></span></div>
+      </div>
     </div>
-
-    <!-- Digitando... -->
-    <div class="digitando" id="digitando" style="display:none;">
-      Fulano está digitando...
-    </div>
-
-    <!-- Mensagem 2 -->
-    <div class="mensagem" id="mensagem2" style="display:none;">
-      Sou da equipe de suporte e vou te encaminhar para o atendimento oficial no WhatsApp. Só um instante!
+    <div class="icons">
+      <i class="fas fa-video"></i>
+      <i class="fas fa-phone-alt"></i>
     </div>
   </div>
 
-  <div class="footer">Atendimento protegido por criptografia 🔒</div>
+  <div class="chat-window" id="chat">
+    <div class="message" id="mensagem1" style="display:none;">
+      Olá! Tudo bem?
+      <span class="time" id="hora1"></span>
+    </div>
+    <div class="digitando" id="digitando" style="display:none;">
+      Mariana está digitando...
+    </div>
+    <div class="message" id="mensagem2" style="display:none;">
+      Sou da equipe de suporte e vou te encaminhar pro atendimento oficial. Só um instante!
+      <span class="time" id="hora2"></span>
+    </div>
+  </div>
 
   <script>
+    function getHoraAgora() {
+      return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    document.getElementById('hora').innerText = getHoraAgora();
+
     setTimeout(() => {
       document.getElementById('mensagem1').style.display = 'block';
+      document.getElementById('hora1').innerText = getHoraAgora();
     }, 1000);
 
     setTimeout(() => {
@@ -81,10 +122,11 @@
     setTimeout(() => {
       document.getElementById('digitando').style.display = 'none';
       document.getElementById('mensagem2').style.display = 'block';
+      document.getElementById('hora2').innerText = getHoraAgora();
     }, 4000);
 
     setTimeout(() => {
-      window.location.href = "https://wa.me/5584999999999?text=Ol%C3%A1%2C%20quero%20receber%20o%20Manual%20do%20WhatsApp!";
+      window.location.href = "https://wa.me/5584999999999?text=Ol%C3%A1%2C%20quero%20receber%20o%20material!";
     }, 7000);
   </script>
 
