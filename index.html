@@ -95,8 +95,8 @@
       <div style="font-size: 12px; color: lightgray;">online</div>
     </div>
     <div class="header-actions">
-      <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Call">
-      <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Video">
+      <img src="https://cdn-icons-png.flaticon.com/512/159/159832.png" alt="Call">
+      <img src="https://cdn-icons-png.flaticon.com/512/727/727240.png" alt="Video">
     </div>
   </div>
   <div class="chat" id="chat"></div>
@@ -104,14 +104,20 @@
   <script>
     const chat = document.getElementById('chat');
     const messages = [
-      { sender: 'bot', text: 'Olá, tudo bem? 👋' },
-      { sender: 'bot', text: 'Seja bem-vindo ao nosso suporte oficial.' },
-      { sender: 'bot', text: 'Você quer saber como aquecer seu WhatsApp corretamente e evitar banimentos?' },
-      { sender: 'bot', text: 'Estamos preparando o seu material exclusivo 📘' },
-      { sender: 'bot', text: 'Só mais um instante, por favor...' },
-      { sender: 'bot', text: '✅ Pronto! Manual preparado com as melhores práticas.' },
-      { sender: 'bot', text: 'Enviando agora para o seu WhatsApp 📲' },
-      { sender: 'bot', text: '✅ Enviado com sucesso! Qualquer dúvida estamos aqui.' }
+      { sender: 'bot', text: 'Olá! 👋' },
+      { sender: 'bot', text: 'Aqui é o atendimento automático da nossa equipe.' },
+      { sender: 'bot', text: 'Você deseja receber o Manual do WhatsApp 📘?' },
+      { sender: 'user', text: 'Sim, quero o manual.' },
+      { sender: 'bot', text: 'Perfeito! Você sabia que muita gente é banida logo no primeiro disparo?' },
+      { sender: 'bot', text: 'A gente preparou um conteúdo que ensina o passo a passo para aquecer seus chips e manter eles ativos por muito mais tempo.' },
+      { sender: 'bot', text: 'Além disso, também mostramos como operar no 100% dados móveis ou proxy, pra aumentar ainda mais a segurança.' },
+      { sender: 'bot', text: 'Você quer aprender como evitar banimento e escalar suas operações com segurança?' },
+      { sender: 'user', text: 'Sim! Como eu faço isso?' },
+      { sender: 'bot', text: 'Pronto! O material foi preparado e você vai receber agora mesmo no seu WhatsApp ✅' },
+      { sender: 'bot', text: 'Se por acaso seu WhatsApp cair ou for banido, recomendamos usar nossa copy de recuperação automática!' },
+      { sender: 'bot', text: '⚠️ Atenção: salve esse link porque ele pode te salvar no futuro.' },
+      { sender: 'bot', text: '👉 https://encurtador.com.br/cEiuS' },
+      { sender: 'bot', text: 'Conte com a gente. Estamos aqui para te ajudar no que precisar!' }
     ];
 
     const messageSound = new Audio('https://www.myinstants.com/media/sounds/whatsapp_message.mp3');
