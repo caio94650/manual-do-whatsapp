@@ -3,26 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Manual do WhatsApp</title>
+  <title>SharkBot no WhatsApp</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #e5ddd5;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('https://i.imgur.com/OzvFyXG.png');
+      background-size: cover;
       margin: 0;
       padding: 0;
     }
     .chat-container {
-      max-width: 400px;
-      margin: 40px auto;
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 390px;
+      height: 90vh;
+      margin: 20px auto;
+      background-color: #f0f0f0;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
     .header {
       background: #075e54;
       color: white;
-      padding: 15px;
+      padding: 12px 15px;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -32,34 +36,64 @@
       height: 40px;
       width: 40px;
     }
+    .header .info {
+      flex-grow: 1;
+    }
+    .header .info strong {
+      display: block;
+    }
+    .header .icons {
+      display: flex;
+      gap: 12px;
+    }
+    .header .icons img {
+      height: 22px;
+      filter: invert(1);
+      cursor: pointer;
+    }
     .chat-box {
-      padding: 20px;
+      flex-grow: 1;
+      padding: 20px 15px;
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
     }
     .message {
-      max-width: 75%;
+      max-width: 80%;
       padding: 10px 14px;
       border-radius: 7px;
-      margin-bottom: 10px;
-      line-height: 1.4;
+      margin-bottom: 12px;
+      line-height: 1.5;
+      font-size: 15px;
       position: relative;
     }
     .bot {
       background-color: #dcf8c6;
       align-self: flex-start;
+      border-top-left-radius: 0;
     }
     .user {
       background-color: #fff;
       border: 1px solid #ccc;
       align-self: flex-end;
-      margin-left: auto;
+      border-top-right-radius: 0;
+    }
+    .time {
+      font-size: 11px;
+      color: #555;
+      position: absolute;
+      bottom: 4px;
+      right: 10px;
+    }
+    .check {
+      margin-left: 5px;
+      color: #4fc3f7;
     }
     .button-group {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 20px;
+      margin-top: 10px;
     }
     .button-group button {
       padding: 10px;
@@ -86,15 +120,31 @@
 <div class="chat-container">
   <div class="header">
     <img src="https://cdn-icons-png.flaticon.com/512/4712/4712038.png" alt="Bot">
-    <strong>SharkBot</strong>
+    <div class="info">
+      <strong>SharkBot</strong>
+      <small>online</small>
+    </div>
+    <div class="icons">
+      <img src="https://img.icons8.com/ios-glyphs/30/ffffff/phone.png" alt="call">
+      <img src="https://img.icons8.com/ios-glyphs/30/ffffff/video-call.png" alt="video">
+    </div>
   </div>
   <div class="chat-box" id="chatBox">
-    <!-- Mensagens serão inseridas via JS -->
+    <!-- Mensagens JS -->
   </div>
 </div>
 
+<!-- Áudio de mensagem -->
+<audio id="msgSound" src="https://cdn.jsdelivr.net/gh/caio-chatgpt/audio/sent.mp3" preload="auto"></audio>
+
 <script>
   const chatBox = document.getElementById('chatBox');
+  const msgSound = document.getElementById('msgSound');
+
+  const getTime = () => {
+    const now = new Date();
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
 
   const messages = [
     { type: 'bot', text: 'Olá! 👋 Eu sou o SharkBot, seu assistente aqui no Manual do WhatsApp.' },
@@ -131,11 +181,12 @@
         typing.remove();
         const div = document.createElement('div');
         div.className = 'message bot';
-        div.innerText = msg.text;
+        div.innerHTML = `${msg.text}<div class="time">${getTime()}<span class="check">✔✔</span></div>`;
         chatBox.appendChild(div);
+        msgSound.play(); // 🔊 toca o som
         chatBox.scrollTop = chatBox.scrollHeight;
         index++;
-        setTimeout(showMessage, 1500);
+        setTimeout(showMessage, 1600);
       }, 1200);
 
     } else if (msg.type === 'button') {
@@ -147,7 +198,7 @@
         btn.onclick = () => {
           const userMsg = document.createElement('div');
           userMsg.className = 'message user';
-          userMsg.innerText = option;
+          userMsg.innerHTML = `${option}<div class="time">${getTime()}</div>`;
           chatBox.appendChild(userMsg);
           chatBox.scrollTop = chatBox.scrollHeight;
 
