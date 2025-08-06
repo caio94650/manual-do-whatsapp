@@ -3,66 +3,101 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manual do WhatsApp</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-yHkT1zYV7zvZ2RCcKq7V+fsqBBEXAMPLEzPUYFZBkF7xG6s1KoK6OyM9kgddfGZ+uFmvKqjIEbXMOLn8N8xw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>Atendimento - Manual do WhatsApp</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: Arial, sans-serif;
-      background: #e5ddd5 url('https://i.ibb.co/NpbDb6F/bg-whatsapp.jpg') repeat;
-      background-size: cover;
-      height: 100vh;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .top-bar {
-      background: #075e54;
+    body {
+      font-family: sans-serif;
+      background-color: #ece5dd;
+    }
+    .phone-bar {
+      background-color: #111;
+      color: white;
+      padding: 4px 10px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .whatsapp-header {
+      background-color: #075e54;
       color: white;
       padding: 10px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 10px;
     }
-    .top-bar span { font-size: 14px; }
-    .top-bar .icons i { margin-left: 10px; }
-    .chat-container {
-      max-width: 500px;
-      margin: 0 auto;
-      background: rgba(255,255,255,0.85);
-      height: calc(100vh - 20px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .whatsapp-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    .header-info {
+      flex: 1;
+    }
+    .header-info h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .header-info span {
+      font-size: 12px;
+      color: #cfcfcf;
+    }
+    .chat-box {
       padding: 10px;
-      border-radius: 5px;
-    }
-    #chat {
-      flex-grow: 1;
+      background-image: url('https://i.ibb.co/6g9bqLn/bg-whatsapp.png');
+      background-size: cover;
+      height: calc(100vh - 110px);
       overflow-y: auto;
-      padding-bottom: 10px;
     }
-    .msg {
-      max-width: 70%;
-      margin: 5px 0;
-      padding: 8px 12px;
-      border-radius: 10px;
-      display: inline-block;
+    .message {
+      max-width: 80%;
+      margin: 10px;
+      padding: 10px;
+      border-radius: 8px;
       position: relative;
+      font-size: 14px;
+      line-height: 1.4;
     }
-    .bot { background: #dcf8c6; align-self: flex-start; }
-    .user { background: #fff; align-self: flex-end; text-align: right; }
+    .bot {
+      background-color: white;
+      align-self: flex-start;
+    }
+    .user {
+      background-color: #dcf8c6;
+      align-self: flex-end;
+      margin-left: auto;
+    }
+    .message-time {
+      font-size: 10px;
+      color: gray;
+      margin-top: 5px;
+      text-align: right;
+    }
+    .digitando {
+      font-size: 12px;
+      color: gray;
+      margin-left: 12px;
+    }
     .input-area {
       display: flex;
-      gap: 10px;
-      margin-top: 10px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      gap: 5px;
     }
-    .input-area input {
+    input[type="text"] {
       flex: 1;
       padding: 10px;
-      border: 1px solid #ccc;
       border-radius: 20px;
+      border: none;
     }
-    .input-area button {
-      padding: 10px 20px;
-      background: #25d366;
+    button {
+      padding: 10px 15px;
+      background-color: #075e54;
       color: white;
       border: none;
       border-radius: 20px;
@@ -71,96 +106,132 @@
   </style>
 </head>
 <body>
-  <div class="top-bar">
-    <span id="hora"></span>
-    <div class="icons">
-      <i class="fas fa-signal"></i>
-      <i class="fas fa-wifi"></i>
-      <i class="fas fa-battery-full"></i>
-    </div>
+  <div class="phone-bar">
+    <span id="horaTopo"></span>
+    <span>
+      📶 📡 🔋
+    </span>
   </div>
-  <div class="chat-container">
-    <div id="chat"></div>
-    <div class="input-area" id="input-area">
-      <input type="text" id="input" placeholder="Digite sua resposta..." />
-      <button onclick="enviarMensagem()">Enviar</button>
+  <div class="whatsapp-header">
+    <img src="https://i.ibb.co/0QWTkY4/perfil.jpg" alt="perfil" />
+    <div class="header-info">
+      <h4>Equipe Manual do WhatsApp</h4>
+      <span>online agora</span>
     </div>
+    <div>📞 🎥</div>
   </div>
 
-  <audio id="msg-som" src="https://assets.mixkit.co/sfx/preview/mixkit-classic-click-1117.mp3"></audio>
+  <div class="chat-box" id="chat">
+    <!-- Mensagens serão inseridas aqui -->
+  </div>
+
+  <div class="input-area" id="inputArea" style="display: none">
+    <input type="text" id="resposta" placeholder="Digite sua resposta" />
+    <button onclick="enviarResposta()">Enviar</button>
+  </div>
+
+  <audio id="somBot" src="https://www.myinstants.com/media/sounds/whatsapp_msg.mp3"></audio>
+  <audio id="somUser" src="https://www.myinstants.com/media/sounds/whatsapp_msg.mp3"></audio>
 
   <script>
-    const chat = document.getElementById('chat');
-    const input = document.getElementById('input');
-    const inputArea = document.getElementById('input-area');
-    const som = document.getElementById('msg-som');
-
-    function mostrarHora() {
-      const agora = new Date();
-      const hora = agora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      document.getElementById('hora').innerText = hora;
-    }
-
-    mostrarHora();
-    setInterval(mostrarHora, 60000);
-
-    let nomeUsuario = '';
     let etapa = 0;
-
+    let nomeUsuario = '';
     const mensagens = [
-      { tipo: 'bot', texto: 'Olá, tudo bem? 👋' },
-      { tipo: 'bot', texto: 'Meu nome é Carla, sou da equipe de atendimento do Manual do WhatsApp.' },
-      { tipo: 'bot', texto: 'Qual o seu nome?' }
+      "Olá! Tudo bem? 👋 Eu sou a Juliana, especialista da equipe do Manual do WhatsApp.",
+      "Estou aqui para te ajudar a evitar bloqueios e extrair o máximo do seu WhatsApp profissional. 😊",
+      "Pra gente começar, qual é o seu nome?"
     ];
 
-    function adicionarMensagem(tipo, texto) {
+    const respostasDinamicas = [
+      () => `Prazer te conhecer, ${nomeUsuario}! 👋`,
+      () => `${nomeUsuario}, me conta: você já perdeu algum número por bloqueio ou está tentando prevenir isso?`,
+      "Nós preparamos um guia completo com passo a passo para proteger seus números. Mas antes quero entender seu cenário.",
+      "Você trabalha com vendas, marketing ou automações pelo WhatsApp?"
+    ];
+
+    const chat = document.getElementById('chat');
+    const inputArea = document.getElementById('inputArea');
+    const somBot = document.getElementById('somBot');
+    const somUser = document.getElementById('somUser');
+
+    function adicionarMensagem(texto, classe = 'bot') {
       const msg = document.createElement('div');
-      msg.className = `msg ${tipo}`;
-      msg.innerText = texto;
+      msg.className = `message ${classe}`;
+      msg.innerHTML = `${texto}<div class="message-time">${obterHora()}</div>`;
       chat.appendChild(msg);
-      chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
-      som.play();
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    function enviarMensagem() {
-      const valor = input.value.trim();
-      if (!valor) return;
+    function obterHora() {
+      const agora = new Date();
+      return agora.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
 
-      adicionarMensagem('user', valor);
-      input.value = '';
+    function simularDigitando(callback) {
+      const digitando = document.createElement('div');
+      digitando.className = 'digitando';
+      digitando.innerText = 'digitando...';
+      chat.appendChild(digitando);
+      chat.scrollTop = chat.scrollHeight;
+      setTimeout(() => {
+        chat.removeChild(digitando);
+        callback();
+      }, 1800);
+    }
 
-      if (etapa === 0) {
-        nomeUsuario = valor.split(' ')[0];
-        setTimeout(() => adicionarMensagem('bot', `Prazer te conhecer, ${nomeUsuario}! 😊`), 1000);
-        setTimeout(() => adicionarMensagem('bot', 'Você já tentou usar o WhatsApp para vendas ou marketing?'), 3000);
-        setTimeout(() => adicionarMensagem('bot', 'Nosso Manual vai te ensinar como evitar bloqueios e aquecer chips da forma certa.'), 6000);
-        setTimeout(() => adicionarMensagem('bot', 'Posso te enviar o acesso exclusivo?'), 9000);
-        etapa = 1;
-      } else if (etapa === 1) {
-        setTimeout(() => adicionarMensagem('bot', 'Perfeito! Estamos quase lá. 😎'), 1000);
-        setTimeout(() => adicionarMensagem('bot', 'Clique no botão abaixo para garantir o Manual completo no WhatsApp:'), 3000);
-        setTimeout(() => {
-          const btn = document.createElement('a');
-          btn.href = 'https://encurtador.com.br/cEiuS';
-          btn.innerText = '📥 Acessar Manual via WhatsApp';
-          btn.style.display = 'inline-block';
-          btn.style.marginTop = '10px';
-          btn.style.padding = '10px 15px';
-          btn.style.background = '#25d366';
-          btn.style.color = 'white';
-          btn.style.borderRadius = '10px';
-          btn.style.textDecoration = 'none';
-          chat.appendChild(btn);
-          chat.scrollTo({ top: chat.scrollHeight, behavior: 'smooth' });
-        }, 6000);
+    function enviarResposta() {
+      const resposta = document.getElementById('resposta').value.trim();
+      if (!resposta) return;
+      adicionarMensagem(resposta, 'user');
+      somUser.play();
+      document.getElementById('resposta').value = '';
+      inputArea.style.display = 'none';
+
+      if (etapa === 2) nomeUsuario = resposta;
+
+      setTimeout(() => {
+        simularDigitando(() => {
+          const proxMensagem = respostasDinamicas[etapa - 2];
+          if (typeof proxMensagem === 'function') {
+            adicionarMensagem(proxMensagem());
+          } else {
+            adicionarMensagem(proxMensagem);
+          }
+          somBot.play();
+          etapa++;
+          if (etapa < respostasDinamicas.length + 2) {
+            inputArea.style.display = 'block';
+          } else {
+            simularDigitando(() => {
+              adicionarMensagem(`Se quiser continuar esse atendimento e receber o manual completo, clique no botão abaixo:👇<br><br><a href='https://encurtador.com.br/cEiuS' target='_blank'>📥 Acessar Manual do WhatsApp</a>`);
+              somBot.play();
+            });
+          }
+        });
+      }, 1000);
+    }
+
+    function iniciarMensagens() {
+      let i = 0;
+      function prox() {
+        if (i < mensagens.length) {
+          simularDigitando(() => {
+            adicionarMensagem(mensagens[i]);
+            somBot.play();
+            i++;
+            if (i === mensagens.length) {
+              inputArea.style.display = 'block';
+            } else {
+              setTimeout(prox, 2000);
+            }
+          });
+        }
       }
+      prox();
     }
 
-    window.onload = () => {
-      mensagens.forEach((m, i) => {
-        setTimeout(() => adicionarMensagem(m.tipo, m.texto), i * 1500);
-      });
-    }
+    document.getElementById('horaTopo').innerText = obterHora();
+    iniciarMensagens();
   </script>
 </body>
 </html>
