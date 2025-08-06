@@ -1,212 +1,69 @@
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manual do WhatsApp</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>Atendimento WhatsApp</title>
   <style>
-    * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: #ece5dd;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
+      font-family: Arial, sans-serif;
+      background-color: #ece5dd;
     }
-    .chat-header {
-      background: #075e54;
-      color: white;
-      padding: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 10;
+    .chat {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    .chat-header .info {
-      display: flex;
-      align-items: center;
-    }
-    .chat-header img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    .chat-header .icons i {
-      font-size: 18px;
-      margin-left: 15px;
-    }
-    .chat-window {
-      flex: 1;
-      margin-top: 60px;
-      padding: 15px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .message {
+    .mensagem {
       background: #dcf8c6;
-      padding: 10px 14px;
-      border-radius: 7px;
-      margin: 6px 0;
-      align-self: flex-start;
-      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin: 10px 0;
       position: relative;
     }
-    .message.bot {
-      align-self: flex-start;
+    .mensagem strong {
+      color: #075e54;
     }
-    .message.user {
-      align-self: flex-end;
-      background: #fff;
-    }
-    .message .time {
-      font-size: 10px;
+    .digitando {
+      font-style: italic;
       color: gray;
-      position: absolute;
-      right: 8px;
-      bottom: 4px;
+      background: none;
+      padding: 0;
+      margin-left: 10px;
     }
-    .message .check {
-      font-size: 12px;
-      color: #34b7f1;
-      margin-left: 5px;
-    }
-    #input-area {
-      display: none;
-      padding: 10px;
-      background: #fff;
-      border-top: 1px solid #ccc;
-      display: flex;
-    }
-    #nameInput {
-      flex: 1;
-      padding: 8px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-    #sendBtn {
-      background: #075e54;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      margin-left: 8px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    @media screen and (max-width: 600px) {
-      .chat-window { padding: 10px; }
-      .message { font-size: 14px; }
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      color: #888;
+      margin-top: 30px;
     }
   </style>
 </head>
 <body>
-  <div class="chat-header">
-    <div class="info">
-      <img src="https://i.ibb.co/YBWSWv5Z/logo-png.png" alt="Avatar">
-      <div>
-        <div style="font-weight:bold">Mariana - Manual do WhatsApp</div>
-        <div style="font-size: 12px;">Online às <span id="hora"></span></div>
-      </div>
+
+  <div class="chat" id="chat">
+    <div class="mensagem">
+      <strong>Fulano:</strong> Olá! Tudo bem?
     </div>
-    <div class="icons">
-      <i class="fas fa-video"></i>
-      <i class="fas fa-phone-alt"></i>
+    <div class="mensagem">
+      <strong>Fulano:</strong> Sou da equipe de suporte e vou te encaminhar pro atendimento oficial!
+    </div>
+    <div class="mensagem digitando" id="digitando">
+      Fulano está digitando...
     </div>
   </div>
 
-  <div class="chat-window" id="chat"></div>
-
-  <div id="input-area">
-    <input type="text" id="nameInput" placeholder="Digite aqui...">
-    <button id="sendBtn">Enviar</button>
-  </div>
+  <div class="footer">Simulando atendimento seguro via WhatsApp...</div>
 
   <script>
-    const chat = document.getElementById('chat');
-    const inputArea = document.getElementById('input-area');
-    const nameInput = document.getElementById('nameInput');
-    const sendBtn = document.getElementById('sendBtn');
-
-    let nome = '';
-    let etapa = 0;
-
-    function adicionarMensagem(texto, classe = 'bot') {
-      const msg = document.createElement('div');
-      msg.className = `message ${classe}`;
-      const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      msg.innerHTML = `${texto}<span class="time">${hora}<span class="check">✔✔</span></span>`;
-      chat.appendChild(msg);
-      chat.scrollTop = chat.scrollHeight;
-    }
-
-    function iniciarChat() {
-      const mensagens = [
-        { texto: "⚠️ Seu WhatsApp é seu ganha-pão... e pode ser banido a qualquer momento, sem aviso. Você estaria pronto se isso acontecesse hoje?", delay: 5000 },
-        { texto: "Você investe em tráfego. Cria conteúdo. Responde leads. Fecha vendas. Mas basta um passo errado — às vezes sem perceber — e o WhatsApp derruba seu número.", delay: 8000 },
-        { texto: "E você perde tudo: contatos, conversas, clientes, autoridade.", delay: 8000 },
-        { texto: "Isso já aconteceu com você? Ou o medo de acontecer te trava?", delay: 8000 },
-        { texto: "A verdade é dura: a maioria nem sabe que está fazendo errado. Mas existe um método... um passo a passo real, usado por quem roda dezenas de números por mês — sem bloqueios.", delay: 8000 },
-        { texto: "Foi por isso que criamos o Manual do WhatsApp. Um guia prático com tudo que você precisa pra aumentar a vida útil do seu número e escalar com segurança.", delay: 8000 },
-        { texto: "💡 Já ajudamos mais de 2.400 pessoas a manter seus números ativos, mesmo com uso intenso. O segredo? Aquecer do jeito certo. Usar IPs limpos. Simular comportamento humano.", delay: 8000 },
-        { texto: "✅ Estratégia de aquecimento dia a dia<br>✅ Como evitar Shadowban silencioso<br>✅ Ferramentas e cuidados com IP, chip e conta<br>✅ Planilha de controle pronta<br>✅ Bônus: chip virtual por R$ 7", delay: 8000 },
-        { texto: "💥 E mais: app gratuito que aquece mais de 5 WhatsApp ao mesmo tempo, sem cruzar dados, simulando interações reais.", delay: 8000 },
-        { texto: "Quer receber o Manual + App + Bônus direto no seu WhatsApp? Me diz seu nome aqui 👇", delay: 8000 }
-      ];
-
-      let i = 0;
-      function mostrarProxima() {
-        if (i < mensagens.length) {
-          adicionarMensagem(mensagens[i].texto);
-          setTimeout(mostrarProxima, mensagens[i].delay);
-          i++;
-        } else {
-          inputArea.style.display = 'flex';
-        }
-      }
-
-      mostrarProxima();
-    }
-
-    sendBtn.addEventListener('click', () => {
-      if (etapa === 0 && nameInput.value.trim() !== '') {
-        nome = nameInput.value.trim();
-        adicionarMensagem(nome, 'user');
-        inputArea.style.display = 'none';
-        etapa++;
-
-        setTimeout(() => adicionarMensagem(`Prazer em te conhecer, ${nome}! 💚`), 2000);
-        setTimeout(() => adicionarMensagem(`Agora me diz, você quer mesmo ter segurança e escalar suas vendas com o WhatsApp sem medo de ban?`), 6000);
-        setTimeout(() => adicionarMensagem(`Clique abaixo para receber o Manual, o App e os Bônus exclusivos no seu WhatsApp 👇`), 10000);
-        setTimeout(() => {
-          const botao = document.createElement('a');
-          botao.href = 'https://encurtador.com.br/cEiuS';
-          botao.innerText = '✅ Sim, quero agora!';
-          botao.style.display = 'inline-block';
-          botao.style.marginTop = '10px';
-          botao.style.padding = '10px 15px';
-          botao.style.background = '#25D366';
-          botao.style.color = 'white';
-          botao.style.borderRadius = '6px';
-          botao.style.textDecoration = 'none';
-          chat.appendChild(botao);
-          chat.scrollTop = chat.scrollHeight;
-        }, 12000);
-      }
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const horaAtual = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      document.getElementById('hora').innerText = horaAtual;
-      iniciarChat();
-    });
+    setTimeout(() => {
+      window.location.href = "https://wa.me/5584999999999?text=Ol%C3%A1%2C%20quero%20receber%20o%20Manual%20do%20WhatsApp!";
+    }, 3000);
   </script>
+
 </body>
 </html>
