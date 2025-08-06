@@ -1,243 +1,208 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Manual do WhatsApp</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      background-color: #e5ddd5;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
+      background: #ece5dd;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
     }
-    header {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      background-color: #075e54;
+    .chat-header {
+      background: #075e54;
       color: white;
       padding: 10px;
       display: flex;
       align-items: center;
-      z-index: 1000;
+      justify-content: space-between;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 10;
     }
-    header img {
-      border-radius: 50%;
-      margin-right: 10px;
+    .chat-header .info {
+      display: flex;
+      align-items: center;
+    }
+    .chat-header img {
       width: 40px;
       height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
     }
-    #hora {
-      margin-left: auto;
-      font-size: 14px;
+    .chat-header .icons i {
+      font-size: 18px;
+      margin-left: 15px;
     }
-    .chat {
-      margin-top: 70px;
-      padding: 10px;
+    .chat-window {
+      flex: 1;
+      margin-top: 60px;
+      padding: 15px;
+      overflow-y: auto;
       display: flex;
       flex-direction: column;
     }
     .message {
-      background-color: #fff;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 10px;
+      background: #dcf8c6;
+      padding: 10px 14px;
+      border-radius: 7px;
+      margin: 6px 0;
+      align-self: flex-start;
       max-width: 80%;
-      word-wrap: break-word;
+      position: relative;
     }
-    .bot {
-      background-color: #dcf8c6;
+    .message.bot {
       align-self: flex-start;
     }
-    .user {
-      background-color: #fff;
+    .message.user {
       align-self: flex-end;
-      margin-left: auto;
+      background: #fff;
     }
-    .input-area {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background-color: #f0f0f0;
+    .message .time {
+      font-size: 10px;
+      color: gray;
+      position: absolute;
+      right: 8px;
+      bottom: 4px;
+    }
+    .message .check {
+      font-size: 12px;
+      color: #34b7f1;
+      margin-left: 5px;
+    }
+    #input-area {
+      display: none;
       padding: 10px;
+      background: #fff;
+      border-top: 1px solid #ccc;
       display: flex;
-      gap: 10px;
     }
-    .input-area input {
+    #nameInput {
       flex: 1;
-      padding: 10px;
-      font-size: 16px;
-    }
-    .input-area button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #25d366;
-      border: none;
-      color: white;
+      padding: 8px;
+      border: 1px solid #ccc;
       border-radius: 5px;
     }
-    .button-options {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .button-options button {
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      background-color: #25d366;
+    #sendBtn {
+      background: #075e54;
       color: white;
+      border: none;
+      padding: 8px 14px;
+      margin-left: 8px;
       border-radius: 5px;
+      cursor: pointer;
     }
-    @media (max-width: 600px) {
-      .message {
-        font-size: 14px;
-      }
-      .input-area input {
-        font-size: 14px;
-      }
-      .input-area button {
-        font-size: 14px;
-      }
+    @media screen and (max-width: 600px) {
+      .chat-window { padding: 10px; }
+      .message { font-size: 14px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="Foto de Perfil">
-    <div>Mariana - Manual do WhatsApp</div>
-    <div id="hora"></div>
-  </header>
-
-  <div class="chat" id="chat"></div>
-
-  <div class="input-area" id="input-area">
-    <input type="text" id="user-input" placeholder="Digite aqui..." />
-    <button id="send-button">Enviar</button>
+  <div class="chat-header">
+    <div class="info">
+      <img src="https://i.ibb.co/YBWSWv5Z/logo-png.png" alt="Avatar">
+      <div>
+        <div style="font-weight:bold">Mariana - Manual do WhatsApp</div>
+        <div style="font-size: 12px;">Online às <span id="hora"></span></div>
+      </div>
+    </div>
+    <div class="icons">
+      <i class="fas fa-video"></i>
+      <i class="fas fa-phone-alt"></i>
+    </div>
   </div>
 
-  <audio id="msg-sound" src="https://notificationsounds.com/storage/sounds/file-sounds-1152-pristine.mp3"></audio>
+  <div class="chat-window" id="chat"></div>
+
+  <div id="input-area">
+    <input type="text" id="nameInput" placeholder="Digite aqui...">
+    <button id="sendBtn">Enviar</button>
+  </div>
 
   <script>
-    const chat = document.getElementById("chat");
-    const inputArea = document.getElementById("input-area");
-    const userInput = document.getElementById("user-input");
-    const sendButton = document.getElementById("send-button");
-    const msgSound = document.getElementById("msg-sound");
+    const chat = document.getElementById('chat');
+    const inputArea = document.getElementById('input-area');
+    const nameInput = document.getElementById('nameInput');
+    const sendBtn = document.getElementById('sendBtn');
 
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    let nome = '';
+    let etapa = 0;
 
-    const showBotMessage = async (text, delay = 4000, buttons = []) => {
-      const typing = document.createElement("div");
-      typing.textContent = "Digitando...";
-      typing.className = "message bot";
-      chat.appendChild(typing);
-      chat.scrollTop = chat.scrollHeight;
-      await sleep(delay);
-      typing.remove();
-
-      const msg = document.createElement("div");
-      msg.className = "message bot";
-      msg.textContent = text;
+    function adicionarMensagem(texto, classe = 'bot') {
+      const msg = document.createElement('div');
+      msg.className = `message ${classe}`;
+      const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      msg.innerHTML = `${texto}<span class="time">${hora}<span class="check">✔✔</span></span>`;
       chat.appendChild(msg);
-      msgSound.play();
       chat.scrollTop = chat.scrollHeight;
+    }
 
-      if (buttons.length > 0) {
-        const buttonBox = document.createElement("div");
-        buttonBox.className = "button-options";
-        buttons.forEach((btn) => {
-          const b = document.createElement("button");
-          b.textContent = btn;
-          b.onclick = () => handleButtonResponse(btn);
-          buttonBox.appendChild(b);
-        });
-        chat.appendChild(buttonBox);
-        chat.scrollTop = chat.scrollHeight;
+    function iniciarChat() {
+      const mensagens = [
+        "⚠️ Seu WhatsApp é seu ganha-pão... e pode ser banido a qualquer momento, sem aviso. Você estaria pronto se isso acontecesse hoje?",
+        "Você investe em tráfego. Cria conteúdo. Responde leads. Fecha vendas. Mas basta um passo errado — às vezes sem perceber — e o WhatsApp derruba seu número.",
+        "E você perde tudo: contatos, conversas, clientes, autoridade.",
+        "Isso já aconteceu com você? Ou o medo de acontecer te trava?",
+        "A verdade é dura: a maioria nem sabe que está fazendo errado. Mas existe um método... um passo a passo real, usado por quem roda dezenas de números por mês — sem bloqueios.",
+        "Foi por isso que criamos o Manual do WhatsApp. Um guia prático com tudo que você precisa pra aumentar a vida útil do seu número e escalar com segurança.",
+        "💡 Já ajudamos mais de 2.400 pessoas a manter seus números ativos, mesmo com uso intenso. O segredo? Aquecer do jeito certo. Usar IPs limpos. Simular comportamento humano.",
+        "✅ Estratégia de aquecimento dia a dia\n✅ Como evitar Shadowban silencioso\n✅ Ferramentas e cuidados com IP, chip e conta\n✅ Planilha de controle pronta\n✅ Bônus: chip virtual por R$ 7",
+        "💥 E mais: app gratuito que aquece mais de 5 WhatsApp ao mesmo tempo, sem cruzar dados, simulando interações reais.",
+        "Quer receber o Manual + App + Bônus direto no seu WhatsApp? Me diz seu nome aqui 👇"
+      ];
+
+      let i = 0;
+      function mostrarProxima() {
+        if (i < mensagens.length) {
+          adicionarMensagem(mensagens[i]);
+          i++;
+          setTimeout(mostrarProxima, 4000);
+        } else {
+          inputArea.style.display = 'flex';
+        }
       }
-    };
+      mostrarProxima();
+    }
 
-    let userName = "";
-
-    const handleButtonResponse = async (text) => {
-      const buttonContainer = document.querySelector(".button-options");
-      if (buttonContainer) buttonContainer.remove();
-
-      const userMsg = document.createElement("div");
-      userMsg.className = "message user";
-      userMsg.textContent = text;
-      chat.appendChild(userMsg);
-      chat.scrollTop = chat.scrollHeight;
-
-      await nextStep();
-    };
-
-    const nextStep = async () => {
-      if (!userName) {
-        await showBotMessage("Oi! Tudo bem? Me chamo Mariana, sou da equipe do Manual do WhatsApp.");
-        await showBotMessage("Antes de mais nada, posso saber seu nome?");
-        inputArea.style.display = "flex";
-        userInput.focus();
-      } else if (step === 1) {
-        await showBotMessage(`Prazer em te conhecer, ${userName}! 💚`);
-        await showBotMessage("Me responde com sinceridade:\nVocê já perdeu um número do WhatsApp por banimento?", 4000, [
-          "Sim, já perdi um",
-          "Ainda não, mas tenho medo",
-          "Não uso ainda pra vendas"
-        ]);
-        step++;
-      } else if (step === 2) {
-        await showBotMessage(`Isso acontece mais do que você imagina, ${userName}...`);
-        await showBotMessage("A maioria das pessoas é banida por não saber a forma certa de aquecer e usar o WhatsApp.");
-        await showBotMessage("Mas calma, existe um passo a passo pra evitar isso.");
-        await showBotMessage("E o melhor: você pode aplicar mesmo sem experiência.");
-        await showBotMessage("A gente já ajudou mais de 2.400 pessoas a manterem seus números ativos por meses.");
-        await showBotMessage("Com um método simples e seguro.");
-        await showBotMessage("O Manual do WhatsApp mostra tudo isso, com exemplos práticos, ferramentas e dicas secretas.");
-        await showBotMessage("E eu posso te liberar o acesso agora mesmo.");
-        await showBotMessage(`Você quer receber o Manual no seu WhatsApp, ${userName}?`, 4000, ["✅ Sim, quero agora!"]);        
-        step++;
-      } else if (step === 3) {
-        window.location.href = "https://encurtador.com.br/cEiuS";
+    sendBtn.addEventListener('click', () => {
+      if (etapa === 0 && nameInput.value.trim() !== '') {
+        nome = nameInput.value.trim();
+        adicionarMensagem(nome, 'user');
+        inputArea.style.display = 'none';
+        etapa++;
+        setTimeout(() => adicionarMensagem(`Prazer em te conhecer, ${nome}! 💚`), 2000);
+        setTimeout(() => adicionarMensagem(`Agora me diz, você quer mesmo ter segurança e escalar suas vendas com o WhatsApp sem medo de ban?`), 6000);
+        setTimeout(() => adicionarMensagem(`Clique abaixo para receber o Manual, o App e os Bônus exclusivos no seu WhatsApp 👇`), 10000);
+        setTimeout(() => {
+          const botao = document.createElement('a');
+          botao.href = 'https://encurtador.com.br/cEiuS';
+          botao.innerText = '✅ Sim, quero agora!';
+          botao.style.display = 'inline-block';
+          botao.style.marginTop = '10px';
+          botao.style.padding = '10px 15px';
+          botao.style.background = '#25D366';
+          botao.style.color = 'white';
+          botao.style.borderRadius = '6px';
+          botao.style.textDecoration = 'none';
+          chat.appendChild(botao);
+          chat.scrollTop = chat.scrollHeight;
+        }, 12000);
       }
-    };
-
-    let step = 1;
-
-    const submitName = async () => {
-      if (userInput.value.trim() !== "") {
-        const userMsg = document.createElement("div");
-        userMsg.className = "message user";
-        userMsg.textContent = userInput.value;
-        chat.appendChild(userMsg);
-        chat.scrollTop = chat.scrollHeight;
-
-        userName = userInput.value;
-        userInput.value = "";
-        inputArea.style.display = "none";
-
-        await nextStep();
-      }
-    };
-
-    sendButton.addEventListener("click", submitName);
-    userInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") submitName();
     });
 
-    const updateTime = () => {
-      const now = new Date();
-      const hora = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      document.getElementById("hora").textContent = hora;
-    };
-    setInterval(updateTime, 1000);
-    updateTime();
-
-    window.onload = nextStep;
+    document.addEventListener('DOMContentLoaded', () => {
+      const horaAtual = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('hora').innerText = horaAtual;
+      iniciarChat();
+    });
   </script>
 </body>
 </html>
