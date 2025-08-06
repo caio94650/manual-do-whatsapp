@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manual do WhatsApp</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
     body {
       margin: 0;
       background-color: #e5ddd5;
@@ -34,6 +37,8 @@
     .chat {
       margin-top: 70px;
       padding: 10px;
+      display: flex;
+      flex-direction: column;
     }
     .message {
       background-color: #fff;
@@ -52,15 +57,10 @@
       align-self: flex-end;
       margin-left: auto;
     }
-    .chat-container {
-      display: flex;
-      flex-direction: column;
-    }
     .input-area {
       position: fixed;
       bottom: 0;
       width: 100%;
-      display: none;
       background-color: #f0f0f0;
       padding: 10px;
       display: flex;
@@ -72,13 +72,12 @@
       font-size: 16px;
     }
     .input-area button {
-      padding: 10px 15px;
-      background-color: #25d366;
-      color: white;
+      padding: 10px 20px;
       font-size: 16px;
+      background-color: #25d366;
       border: none;
+      color: white;
       border-radius: 5px;
-      cursor: pointer;
     }
     .button-options {
       display: flex;
@@ -93,11 +92,16 @@
       background-color: #25d366;
       color: white;
       border-radius: 5px;
-      cursor: pointer;
     }
-    @media screen and (max-width: 600px) {
+    @media (max-width: 600px) {
       .message {
-        max-width: 100%;
+        font-size: 14px;
+      }
+      .input-area input {
+        font-size: 14px;
+      }
+      .input-area button {
+        font-size: 14px;
       }
     }
   </style>
@@ -109,11 +113,11 @@
     <div id="hora"></div>
   </header>
 
-  <div class="chat chat-container" id="chat"></div>
+  <div class="chat" id="chat"></div>
 
   <div class="input-area" id="input-area">
     <input type="text" id="user-input" placeholder="Digite aqui..." />
-    <button onclick="enviarInput()">Enviar</button>
+    <button id="send-button">Enviar</button>
   </div>
 
   <audio id="msg-sound" src="https://notificationsounds.com/storage/sounds/file-sounds-1152-pristine.mp3"></audio>
@@ -122,11 +126,12 @@
     const chat = document.getElementById("chat");
     const inputArea = document.getElementById("input-area");
     const userInput = document.getElementById("user-input");
+    const sendButton = document.getElementById("send-button");
     const msgSound = document.getElementById("msg-sound");
 
     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    const showBotMessage = async (text, delay = 1000, buttons = []) => {
+    const showBotMessage = async (text, delay = 4000, buttons = []) => {
       const typing = document.createElement("div");
       typing.textContent = "Digitando...";
       typing.className = "message bot";
@@ -173,28 +178,28 @@
 
     const nextStep = async () => {
       if (!userName) {
-        await showBotMessage("Oi! Tudo bem? Me chamo Mariana, sou da equipe do Manual do WhatsApp.", 1500);
-        await showBotMessage("Antes de mais nada, posso saber seu nome?", 1500);
+        await showBotMessage("Oi! Tudo bem? Me chamo Mariana, sou da equipe do Manual do WhatsApp.");
+        await showBotMessage("Antes de mais nada, posso saber seu nome?");
         inputArea.style.display = "flex";
         userInput.focus();
       } else if (step === 1) {
-        await showBotMessage(`Prazer em te conhecer, ${userName}! 💚`, 1200);
-        await showBotMessage("Me responde com sinceridade:\nVocê já perdeu um número do WhatsApp por banimento?", 1500, [
+        await showBotMessage(`Prazer em te conhecer, ${userName}! 💚`);
+        await showBotMessage("Me responde com sinceridade:\nVocê já perdeu um número do WhatsApp por banimento?", 4000, [
           "Sim, já perdi um",
           "Ainda não, mas tenho medo",
           "Não uso ainda pra vendas"
         ]);
         step++;
       } else if (step === 2) {
-        await showBotMessage(`Isso acontece mais do que você imagina, ${userName}...`, 1500);
-        await showBotMessage("A maioria das pessoas é banida por não saber a forma certa de aquecer e usar o WhatsApp.", 1500);
-        await showBotMessage("Mas calma, existe um passo a passo pra evitar isso.", 1500);
-        await showBotMessage("E o melhor: você pode aplicar mesmo sem experiência.", 1500);
-        await showBotMessage("A gente já ajudou mais de 2.400 pessoas a manterem seus números ativos por meses.", 1500);
-        await showBotMessage("Com um método simples e seguro.", 1500);
-        await showBotMessage("O Manual do WhatsApp mostra tudo isso, com exemplos práticos, ferramentas e dicas secretas.", 1500);
-        await showBotMessage("E eu posso te liberar o acesso agora mesmo.", 1500);
-        await showBotMessage(`Você quer receber o Manual no seu WhatsApp, ${userName}?`, 1500, ["✅ Sim, quero agora!"]);        
+        await showBotMessage(`Isso acontece mais do que você imagina, ${userName}...`);
+        await showBotMessage("A maioria das pessoas é banida por não saber a forma certa de aquecer e usar o WhatsApp.");
+        await showBotMessage("Mas calma, existe um passo a passo pra evitar isso.");
+        await showBotMessage("E o melhor: você pode aplicar mesmo sem experiência.");
+        await showBotMessage("A gente já ajudou mais de 2.400 pessoas a manterem seus números ativos por meses.");
+        await showBotMessage("Com um método simples e seguro.");
+        await showBotMessage("O Manual do WhatsApp mostra tudo isso, com exemplos práticos, ferramentas e dicas secretas.");
+        await showBotMessage("E eu posso te liberar o acesso agora mesmo.");
+        await showBotMessage(`Você quer receber o Manual no seu WhatsApp, ${userName}?`, 4000, ["✅ Sim, quero agora!"]);        
         step++;
       } else if (step === 3) {
         window.location.href = "https://encurtador.com.br/cEiuS";
@@ -203,7 +208,7 @@
 
     let step = 1;
 
-    function enviarInput() {
+    const submitName = async () => {
       if (userInput.value.trim() !== "") {
         const userMsg = document.createElement("div");
         userMsg.className = "message user";
@@ -215,14 +220,13 @@
         userInput.value = "";
         inputArea.style.display = "none";
 
-        nextStep();
+        await nextStep();
       }
-    }
+    };
 
-    userInput.addEventListener("keypress", function (e) {
-      if (e.key === "Enter") {
-        enviarInput();
-      }
+    sendButton.addEventListener("click", submitName);
+    userInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") submitName();
     });
 
     const updateTime = () => {
