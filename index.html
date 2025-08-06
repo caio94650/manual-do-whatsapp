@@ -4,176 +4,174 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manual do WhatsApp</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      background: #e5ddd5;
-      font-family: Arial, sans-serif;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #e5ddd5;
     }
-    .chat-container {
-      max-width: 420px;
-      margin: 0 auto;
-      background: #fff;
-      border: 1px solid #ccc;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .chat-header {
-      background: #075e54;
+    .phone-header {
+      background-color: #075e54;
       color: white;
-      padding: 12px;
+      padding: 10px 15px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-    }
-    .chat-header img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    .chat-header .info {
-      display: flex;
-      flex-direction: column;
-    }
-    .chat-header .info span {
       font-size: 14px;
     }
-    .messages {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      background: #efeae2;
+    .chat-container {
+      background: url('https://i.ibb.co/PYfM8q1/whatsapp-bg.png') repeat;
+      padding: 60px 10px 80px;
+      min-height: 100vh;
       position: relative;
     }
     .message {
       background: #dcf8c6;
       padding: 8px 12px;
-      margin: 10px 0;
-      border-radius: 7px;
-      max-width: 75%;
+      border-radius: 7.5px;
+      margin: 8px 0;
+      max-width: 80%;
       position: relative;
+      animation: fadeIn 0.4s ease-in-out;
     }
-    .bot {
+    .message.bot {
+      background: #fff;
       align-self: flex-start;
     }
-    .user {
+    .message.user {
+      background: #dcf8c6;
       align-self: flex-end;
-      background: #fff;
-      border: 1px solid #ccc;
+      margin-left: auto;
+    }
+    .chat-box {
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      margin: auto;
     }
     .input-area {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
       display: flex;
-      border-top: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 0 -1px 3px rgba(0,0,0,0.1);
     }
     .input-area input {
       flex: 1;
       padding: 10px;
-      border: none;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
       outline: none;
     }
     .input-area button {
-      background: #075e54;
-      color: white;
+      background: #25d366;
       border: none;
-      padding: 10px 16px;
+      color: white;
+      padding: 0 15px;
+      margin-left: 10px;
+      font-size: 16px;
+      border-radius: 20px;
       cursor: pointer;
     }
-    .timestamp {
-      font-size: 10px;
-      color: gray;
-      text-align: right;
-      margin-top: 2px;
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .typing {
-      font-style: italic;
-      font-size: 12px;
-      color: #555;
-      padding-left: 10px;
+    .top-bar-clock {
+      font-size: 13px;
     }
   </style>
 </head>
 <body>
+  <div class="phone-header">
+    <div>Manual do WhatsApp</div>
+    <div class="top-bar-clock" id="topClock"></div>
+  </div>
   <div class="chat-container">
-    <div class="chat-header">
-      <img src="https://i.ibb.co/YBWSWv5Z/logo-png.png" alt="Logo" />
-      <div class="info">
-        <strong>Manual do WhatsApp</strong>
-        <span id="status">online</span>
-      </div>
-    </div>
-    <div class="messages" id="messages">
-      <div class="typing" id="typing">digitando...</div>
-    </div>
-    <div class="input-area">
-      <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
-      <button onclick="sendMessage()"><i class="fa fa-paper-plane"></i></button>
+    <div class="chat-box" id="chat">
+      <!-- Mensagens injetadas aqui via JS -->
     </div>
   </div>
-
-  <audio id="msgSound" src="https://notificationsounds.com/notification-sounds/just-saying-613/download/mp3"></audio>
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="Digite aqui...">
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
 
   <script>
-    const messagesEl = document.getElementById("messages");
-    const typingEl = document.getElementById("typing");
-    const msgSound = document.getElementById("msgSound");
-    const userInput = document.getElementById("userInput");
+    const chat = document.getElementById('chat');
+    const input = document.getElementById('userInput');
 
-    let userName = "";
-    let step = 0;
+    let userName = '';
 
-    const replies = [
-      "Oi! Tudo bem? Me chamo Mariana, sou da equipe do Manual do WhatsApp.",
-      "Antes de mais nada, posso saber seu nome?",
-      "Prazer em te conhecer, {name}! 💚",
-      "Você já perdeu um número do WhatsApp por banimento?",
-      "Isso acontece mais do que você imagina, {name}...",
-      "Mas calma, existe um passo a passo pra evitar isso.",
-      "E o melhor: você pode aplicar mesmo sem experiência.",
-      "A gente já ajudou mais de 2.400 pessoas a manterem seus números ativos por meses.",
-      "O Manual do WhatsApp mostra tudo isso com dicas e ferramentas secretas.",
-      "E tem um bônus exclusivo: como ter número de WhatsApp por apenas R$7, sem chip físico!",
-      "Você quer receber o Manual + bônus agora no seu WhatsApp, {name}?",
-      "Clique aqui e receba agora 👉 https://encurtador.com.br/cEiuS"
+    const messages = [
+      { text: 'Olá! Tudo bem? Me chamo Mariana, sou da equipe do Manual do WhatsApp.', delay: 1000 },
+      { text: 'Antes de tudo, qual seu nome?', delay: 2000, expectInput: true },
     ];
 
-    function playSound() {
-      msgSound.play();
+    let current = 0;
+
+    function showMessage(msg, sender = 'bot') {
+      const el = document.createElement('div');
+      el.className = `message ${sender}`;
+      el.innerText = msg;
+      chat.appendChild(el);
+      chat.scrollTop = chat.scrollHeight;
     }
 
-    function botReply() {
-      typingEl.style.display = "block";
+    function processMessages() {
+      if (current >= messages.length) return;
+      const msg = messages[current];
       setTimeout(() => {
-        typingEl.style.display = "none";
-        const msg = document.createElement("div");
-        msg.className = "message bot";
-        let content = replies[step];
-        if (userName) content = content.replaceAll("{name}", userName);
-        msg.innerHTML = content + `<div class="timestamp">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>`;
-        messagesEl.appendChild(msg);
-        playSound();
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-        step++;
-      }, 1000);
+        if (!msg.expectInput) {
+          let text = msg.text.replaceAll('[NOME]', userName);
+          showMessage(text);
+          current++;
+          processMessages();
+        }
+      }, msg.delay);
     }
 
     function sendMessage() {
-      const text = userInput.value.trim();
-      if (!text) return;
-
-      const msg = document.createElement("div");
-      msg.className = "message user";
-      msg.innerHTML = text + `<div class="timestamp">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>`;
-      messagesEl.appendChild(msg);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-
-      if (step === 1) userName = text;
-      userInput.value = "";
-      setTimeout(botReply, 500);
+      const value = input.value.trim();
+      if (!value) return;
+      showMessage(value, 'user');
+      input.value = '';
+      if (!userName) {
+        userName = value;
+        messages.splice(current + 1, 0,
+          { text: `Prazer te conhecer, [NOME]! 💚`, delay: 1500 },
+          { text: 'Me responde com sinceridade:', delay: 1500 },
+          { text: 'Você já perdeu um número do WhatsApp por banimento?', delay: 1500 },
+          { text: 'Isso acontece muito, [NOME]. Mas tem como evitar.', delay: 1500 },
+          { text: 'Criamos um manual completo pra te ensinar a aquecer sua conta, proteger e escalar com segurança.', delay: 1500 },
+          { text: 'E tem mais: vamos te passar um fornecedor de números de WhatsApp por R$7, sem precisar de chip físico!', delay: 1500 },
+          { text: 'Você quer receber tudo isso no seu WhatsApp, [NOME]?', delay: 1500 },
+          { text: 'Clique aqui e receba agora mesmo 👉', delay: 1500 },
+          { text: 'https://encurtador.com.br/cEiuS', delay: 1500 }
+        );
+      }
+      current++;
+      processMessages();
     }
 
-    window.onload = botReply;
+    function updateClock() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('topClock').innerText = `${hours}:${minutes}`;
+    }
+
+    updateClock();
+    setInterval(updateClock, 60000);
+
+    processMessages();
   </script>
 </body>
 </html>
