@@ -5,26 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Manual do WhatsApp</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
     body {
       margin: 0;
       background-color: #e5ddd5;
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
     }
     header {
-      flex-shrink: 0;
+      position: fixed;
+      top: 0;
+      width: 100%;
       background-color: #075e54;
       color: white;
       padding: 10px;
       display: flex;
       align-items: center;
-      position: sticky;
-      top: 0;
       z-index: 1000;
     }
     header img {
@@ -38,14 +32,13 @@
       font-size: 14px;
     }
     .chat {
-      flex-grow: 1;
-      overflow-y: auto;
+      margin-top: 70px;
       padding: 10px;
     }
     .message {
       background-color: #fff;
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 5px;
       margin-bottom: 10px;
       max-width: 80%;
       word-wrap: break-word;
@@ -64,18 +57,28 @@
       flex-direction: column;
     }
     .input-area {
-      position: sticky;
+      position: fixed;
       bottom: 0;
+      width: 100%;
+      display: none;
       background-color: #f0f0f0;
       padding: 10px;
-      display: none;
+      display: flex;
+      gap: 10px;
     }
     .input-area input {
-      width: 100%;
-      padding: 12px;
+      flex: 1;
+      padding: 10px;
       font-size: 16px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
+    }
+    .input-area button {
+      padding: 10px 15px;
+      background-color: #25d366;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
     }
     .button-options {
       display: flex;
@@ -84,7 +87,7 @@
       margin-top: 10px;
     }
     .button-options button {
-      padding: 12px;
+      padding: 10px;
       font-size: 16px;
       border: none;
       background-color: #25d366;
@@ -92,26 +95,9 @@
       border-radius: 5px;
       cursor: pointer;
     }
-
-    /* Responsivo */
-    @media (max-width: 600px) {
+    @media screen and (max-width: 600px) {
       .message {
-        font-size: 15px;
-      }
-      .input-area input {
-        font-size: 15px;
-        padding: 10px;
-      }
-      .button-options button {
-        font-size: 15px;
-        padding: 10px;
-      }
-      header img {
-        width: 35px;
-        height: 35px;
-      }
-      header div {
-        font-size: 14px;
+        max-width: 100%;
       }
     }
   </style>
@@ -127,6 +113,7 @@
 
   <div class="input-area" id="input-area">
     <input type="text" id="user-input" placeholder="Digite aqui..." />
+    <button onclick="enviarInput()">Enviar</button>
   </div>
 
   <audio id="msg-sound" src="https://notificationsounds.com/storage/sounds/file-sounds-1152-pristine.mp3"></audio>
@@ -188,7 +175,7 @@
       if (!userName) {
         await showBotMessage("Oi! Tudo bem? Me chamo Mariana, sou da equipe do Manual do WhatsApp.", 1500);
         await showBotMessage("Antes de mais nada, posso saber seu nome?", 1500);
-        inputArea.style.display = "block";
+        inputArea.style.display = "flex";
         userInput.focus();
       } else if (step === 1) {
         await showBotMessage(`Prazer em te conhecer, ${userName}! 💚`, 1200);
@@ -216,8 +203,8 @@
 
     let step = 1;
 
-    userInput.addEventListener("keypress", async (e) => {
-      if (e.key === "Enter" && userInput.value.trim() !== "") {
+    function enviarInput() {
+      if (userInput.value.trim() !== "") {
         const userMsg = document.createElement("div");
         userMsg.className = "message user";
         userMsg.textContent = userInput.value;
@@ -228,7 +215,13 @@
         userInput.value = "";
         inputArea.style.display = "none";
 
-        await nextStep();
+        nextStep();
+      }
+    }
+
+    userInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        enviarInput();
       }
     });
 
