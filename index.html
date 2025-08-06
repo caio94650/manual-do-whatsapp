@@ -1,68 +1,91 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Atendimento WhatsApp</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       background-color: #ece5dd;
     }
-    .chat {
-      max-width: 600px;
+
+    .container {
+      max-width: 500px;
       margin: 50px auto;
       background: #fff;
       border-radius: 10px;
       padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .mensagem {
-      background: #dcf8c6;
-      padding: 10px 15px;
-      border-radius: 8px;
-      margin: 10px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       position: relative;
     }
-    .mensagem strong {
-      color: #075e54;
+
+    .mensagem {
+      max-width: 80%;
+      padding: 10px 15px;
+      background: #dcf8c6;
+      border-radius: 8px 8px 8px 0;
+      margin-bottom: 12px;
+      position: relative;
+      color: #000;
+      font-size: 15px;
+      line-height: 1.4;
     }
+
     .digitando {
       font-style: italic;
       color: gray;
-      background: none;
-      padding: 0;
-      margin-left: 10px;
+      font-size: 13px;
+      margin-bottom: 15px;
     }
+
     .footer {
       text-align: center;
-      font-size: 14px;
-      color: #888;
-      margin-top: 30px;
+      font-size: 13px;
+      color: #666;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-  <div class="chat" id="chat">
-    <div class="mensagem">
-      <strong>Fulano:</strong> Olá! Tudo bem?
+  <div class="container" id="chat">
+    <!-- Mensagem 1 -->
+    <div class="mensagem" id="mensagem1" style="display:none;">
+      Olá! Tudo bem? 👋
     </div>
-    <div class="mensagem">
-      <strong>Fulano:</strong> Sou da equipe de suporte e vou te encaminhar pro atendimento oficial!
-    </div>
-    <div class="mensagem digitando" id="digitando">
+
+    <!-- Digitando... -->
+    <div class="digitando" id="digitando" style="display:none;">
       Fulano está digitando...
+    </div>
+
+    <!-- Mensagem 2 -->
+    <div class="mensagem" id="mensagem2" style="display:none;">
+      Sou da equipe de suporte e vou te encaminhar para o atendimento oficial no WhatsApp. Só um instante!
     </div>
   </div>
 
-  <div class="footer">Simulando atendimento seguro via WhatsApp...</div>
+  <div class="footer">Atendimento protegido por criptografia 🔒</div>
 
   <script>
     setTimeout(() => {
+      document.getElementById('mensagem1').style.display = 'block';
+    }, 1000);
+
+    setTimeout(() => {
+      document.getElementById('digitando').style.display = 'block';
+    }, 2500);
+
+    setTimeout(() => {
+      document.getElementById('digitando').style.display = 'none';
+      document.getElementById('mensagem2').style.display = 'block';
+    }, 4000);
+
+    setTimeout(() => {
       window.location.href = "https://wa.me/5584999999999?text=Ol%C3%A1%2C%20quero%20receber%20o%20Manual%20do%20WhatsApp!";
-    }, 3000);
+    }, 7000);
   </script>
 
 </body>
