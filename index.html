@@ -34,6 +34,8 @@
     }
     .chat-box {
       padding: 20px;
+      display: flex;
+      flex-direction: column;
     }
     .message {
       max-width: 75%;
@@ -71,6 +73,12 @@
     .button-group button:hover {
       background: #128c7e;
     }
+    .typing {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 10px;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -89,13 +97,19 @@
   const chatBox = document.getElementById('chatBox');
 
   const messages = [
-    { type: 'bot', text: 'Olá! 👋 Eu sou o SharkBot.' },
-    { type: 'bot', text: 'Você quer aprender como aquecer o WhatsApp sem risco de banimento?' },
-    { type: 'button', options: ['Sim, quero o manual 📘', 'Me explica melhor antes 🤔'] },
-    { type: 'bot', text: 'Perfeito! Com esse guia, você vai aprender a proteger seus números e escalar com segurança.' },
-    { type: 'bot', text: 'Clique no botão abaixo para receber o eBook agora mesmo via WhatsApp.' },
+    { type: 'bot', text: 'Olá! 👋 Eu sou o SharkBot, seu assistente aqui no Manual do WhatsApp.' },
+    { type: 'bot', text: 'Trabalho ajudando vendedores, afiliados e agências a protegerem seus números e evitarem banimentos.' },
+    { type: 'bot', text: 'Hoje vou te mostrar como aquecer o WhatsApp do jeito certo. Topa?' },
+    { type: 'button', options: ['Sim, quero aprender 📘', 'Depende, é confiável? 🤨'] },
+    { type: 'bot', text: 'Show! Esse material já ajudou centenas de pessoas a começarem com segurança no WhatsApp.' },
+    { type: 'bot', text: 'O conteúdo é direto, prático e totalmente gratuito.' },
+    { type: 'bot', text: 'Você vai aprender como evitar banimentos, como aquecer o chip passo a passo e ainda conhecer uma ferramenta que faz isso automaticamente.' },
+    { type: 'bot', text: 'Pronto para baixar o manual?' },
+    { type: 'button', options: ['Quero baixar agora ✅'] },
+    { type: 'bot', text: 'Perfeito! Clique no botão abaixo para receber o eBook via WhatsApp.' },
     { type: 'button', options: ['Receber via WhatsApp'] },
-    { type: 'bot', text: '💡 Bônus: lá no WhatsApp, você também vai descobrir como automatizar o aquecimento com apenas 1 clique usando o SharkBotzap.' }
+    { type: 'bot', text: '💡 Bônus: No WhatsApp, vou te mostrar como usar o SharkBotzap — uma ferramenta que simula uso humano e aquece chips com segurança.' },
+    { type: 'bot', text: 'Nos vemos lá! 😉' }
   ];
 
   let index = 0;
@@ -106,10 +120,24 @@
     const msg = messages[index];
 
     if (msg.type === 'bot') {
-      const div = document.createElement('div');
-      div.className = 'message bot';
-      div.innerText = msg.text;
-      chatBox.appendChild(div);
+      const typing = document.createElement('div');
+      typing.className = 'typing';
+      typing.id = 'typing';
+      typing.innerText = 'SharkBot está digitando...';
+      chatBox.appendChild(typing);
+      chatBox.scrollTop = chatBox.scrollHeight;
+
+      setTimeout(() => {
+        typing.remove();
+        const div = document.createElement('div');
+        div.className = 'message bot';
+        div.innerText = msg.text;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+        index++;
+        setTimeout(showMessage, 1500);
+      }, 1200);
+
     } else if (msg.type === 'button') {
       const div = document.createElement('div');
       div.className = 'button-group';
@@ -121,29 +149,24 @@
           userMsg.className = 'message user';
           userMsg.innerText = option;
           chatBox.appendChild(userMsg);
+          chatBox.scrollTop = chatBox.scrollHeight;
 
           if (option.includes('WhatsApp')) {
             window.location.href = 'https://encurtador.com.br/cEiuS';
           } else {
             index++;
-            showMessage();
+            setTimeout(showMessage, 800);
           }
         };
         div.appendChild(btn);
       });
       chatBox.appendChild(div);
-    }
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-    index++;
-
-    if (msg.type === 'bot') {
-      setTimeout(showMessage, 1200);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      index++;
     }
   }
 
-  // Iniciar conversa
-  setTimeout(showMessage, 800);
+  setTimeout(showMessage, 1000);
 </script>
 
 </body>
